@@ -1,0 +1,95 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+struct node{
+
+ int data;
+ struct node *left,*right;
+
+node()
+{
+
+
+ left=NULL;
+ right=NULL;
+
+}
+
+
+};
+node *root=NULL;
+void add(int i)
+{
+ if(root==NULL)
+ {
+     root=new node();
+     root->data=i;
+     root->left=NULL;
+     root->right=NULL;
+
+ }
+ else
+ {
+     node *pre=root;
+
+     node *cur=root;
+     while(cur!=NULL)
+     {
+         pre=cur;
+         if(i<=cur->data)
+         {
+             cur=cur->left;
+         }
+         else
+         {
+             cur=cur->right;
+         }
+
+
+
+     }
+     node *nw=new node();
+     nw->data=i;
+     cur=nw;
+     if(i<=pre->data)
+     {
+         pre->left=cur;
+     }
+     else
+     {
+         pre->right=cur;
+     }
+
+
+ }
+
+
+
+}
+
+void show(node *cur)
+{
+    if(cur==NULL)return;
+    cout<<cur->data<<endl;
+    show(cur->left);
+    show(cur->right);
+
+
+}
+
+int main()
+{
+   int a,b,c;
+   cin>>a;
+   for(b=1;b<=a;b++)
+   {
+       cin>>c;
+       add(c);
+   }
+    show(root);
+
+
+
+
+    return 0;
+}

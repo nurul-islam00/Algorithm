@@ -1,0 +1,195 @@
+#include<bits/stdc++.h>
+using namespace std;
+const int mx=20000;
+const int lg=15;
+int lv[mx];
+int sp[mx][lg];
+int dist[mx][mx];
+int st[mx];
+vector<int>v[mx];
+void dfs(int nd , int p)
+{
+    sp[nd][0]=p;
+    lv[nd]=lv[p]+1;
+    for(int u=0;u<v[nd].size();u++)
+    {
+        int w;
+
+        w=v[nd][u];
+        if(w==p)continue;
+        st[w]=st[nd]+dist[nd][w];
+        dfs(w,nd);
+    }
+}
+void SPTBL( int n)
+{
+    for(int i=1;(1<<i)<=n;i++)
+    {
+        for(int j=0;j<=n;j++)
+        {
+            if(sp[j][i-1]==-1)
+            {
+                continue;
+            }
+            sp[j][i]=sp[sp[j][i-1]][i-1];
+        }
+    }
+}
+int lca(int u,int v)
+{
+
+    if(lv[u]>lv[v])
+    {
+        swap(u,v);
+    }
+int     dist=lv[v]-lv[u];
+    for(int i=14;i>=0;i--)
+    {
+        if((1<<i)<=dist)
+        {
+            dist-=(1<<i);
+            v=sp[v][i];
+        }
+
+    }
+    if(u==v)
+    {
+        return u;
+    }
+    for(int i=14;i>=0;i--)
+    {
+        if(sp[u][i]==sp[v][i])
+        {
+            continue;
+        }
+        u=sp[u][i];
+        v=sp[v][i];
+    }
+    return sp[u][0];
+}
+int main()
+{
+    int tc,n,a,b,c,d;
+    cin>>tc;
+    while(tc--)
+    {
+        cin>>n;
+        for(int i=1;i<=n;i++)
+        {
+            lv[i]=0;
+            dist[i][i]=0;
+            st[i]=0;
+        }
+        for(int i=1;i<=n-1;i++)
+        {
+            int x,y,z;
+            cin>>x>>y>>z;
+            dist[x][y]=z;
+            dist[y][x]=z;
+            v[x].push_back(y);
+            v[y].push_back(x);
+
+        }
+        memset(sp,-1,sizeof(sp));
+
+        dfs(1,0);
+        sp[1][0]=-1;
+        SPTBL(n);
+        string s;
+        while(1)
+        {
+
+         cin>>s;
+        int u,v,t;
+         if(s=="DIST")
+         {
+          cin>>u>>v;
+        int lc=lca(u,v);
+           int aa,bb;
+           aa=(st[u]+st[v])-(st[lc]*2);
+           cout<<aa<<endl;
+
+         }
+         else if(s=="KTH")
+         {
+             cin>>u>>v>>t;
+              int lc=lca(u,v);
+              int aa,bb,cc,dd,ee;
+
+              aa=lv[u]-lv[lc];
+               bb=aa++;
+               int tmp;
+               if(t==1)
+               {
+                   cout<<u<<endl;
+               }
+
+              else if(t<=bb)
+               {
+
+
+
+                    int   dis=t-1;
+                     for(int i=14;i>=0;i--)
+                     {
+                         if(1<<i<=dis)
+                         {
+                             dis-=1<<i;
+                             u=sp[u][i];
+
+                         }
+                     }
+                     cout<<u<<endl;
+
+
+
+
+               }
+               else
+               {
+                   aa=lv[u]-lv[lc];
+                   aa++;
+                   bb=lv[v]-lv[lc];
+                   int tl;
+                   tl=aa+bb;
+                   tl=(tl-t);
+                   for(int i=14;i>=0;i--)
+                   {
+                       if(1<<i<=tl)
+                       {
+                           tl-=1<<i;
+                           v=sp[v][i];
+                       }
+                   }
+                   cout<<v<<endl;
+
+               }
+
+
+
+
+              }
+              else
+              {
+
+           break;
+              }
+
+
+         }
+
+         for(int i=1;i<=n;i++)
+         {
+             v[i].clear();
+         }
+
+
+
+        }
+
+
+
+
+
+    return 0;
+}

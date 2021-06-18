@@ -1,0 +1,147 @@
+#include<bits/stdc++.h>
+using namespace std;
+int dis[10005];
+int low[10005];
+
+
+vector<int>g[10005];
+int cnt=0;
+int res=0;
+
+int root;
+vector<int>fin[10005];
+pair<int,int>p;
+void arti(int a,int r)
+{
+    cnt++;
+    dis[a]=cnt;
+    low[a]=cnt;
+    int d,e;
+
+    for(int b=0;b<g[a].size();b++)
+    {
+
+        int c=g[a][b];
+        if(c==r)
+        {
+            continue;
+        }
+
+        if(dis[c]==0)
+
+        {
+      //   cout<<cnt<<endl;
+
+            arti(c,a);
+            low[a]=min(low[a],low[c]);
+           // cout<<dis[a]<<" "<<low[c]<<endl;
+            if(dis[a]<low[c])
+            {
+               res++;
+               int gg,hh;
+               gg=max(a,c);
+               hh=min(a,c);
+               fin[hh].push_back(gg);
+            }
+       // cout<<dis[a]<<" "<<low[a]<<endl;
+
+        }
+        else
+        {
+            low[a]=min(low[a],dis[c]);
+        }
+    }
+
+
+
+
+}
+int main()
+{
+    string s,t;
+    int v,u,a,b,c,d,e,f,h,tc=1,nt=0;
+
+    vector<int>v4;
+    ofstream fl;
+    fl.open("C:\\Users\\CXC\\Desktop\\output.txt");
+ while(cin>>v)
+ {
+     nt++;
+     cnt=0;
+     res=0;
+     for(u=0;u<v;u++)
+     {
+         cin>>a>>s;
+         dis[u]=0;
+         low[u]=0;
+         c=0;
+         for(b=1;b<s.size()-1;b++)
+         {
+             d=s[b]-48;
+             c=c*10+d;
+         }
+
+        for(d=1;d<=c;d++)
+        {
+            cin>>e;
+            g[a].push_back(e);
+
+
+        }
+     }
+
+
+     // cout<<res<<endl;
+      int flag=0;
+     for(u=0;u<v;u++)
+     {
+         if(dis[u]==0)
+         {
+
+             arti(u,-1);
+         }
+     }
+   //  cout<<flag<<endl;
+     if(v==0||v==1)
+     {
+         cout<<"0 critical links"<<endl;
+     }
+     else
+     {
+         cout<<res<<" critical links"<<endl;
+         for(u=0;u<v;u++)
+         {
+             c=fin[u].size();
+             for(d=0;d<c;d++)
+             {
+                 e=fin[u][d];
+                 v4.push_back(e);
+             }
+             sort(v4.begin(),v4.end());
+             for(d=0;d<v4.size();d++)
+             {
+                 cout<<u<<" - "<<v4[d]<<endl;
+             }
+             v4.clear();
+         }
+     }
+
+     for(u=0;u<v;u++)
+     {
+
+         g[u].clear();
+
+         fin[u].clear();
+     }
+     cout<<endl;
+
+
+
+ }
+
+
+
+
+
+    return 0;
+}

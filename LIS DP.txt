@@ -1,0 +1,92 @@
+#include<bits/stdc++.h>
+using namespace std;
+int mem[2000];
+vector<int>v;
+void dp(int a)
+{
+    cout<<a<<endl;
+    if(mem[a]!=-1)
+    {
+        return;
+    }
+    int cnt=0;
+
+    mem[a]=1;
+
+
+           for(int d=a+1;d<v.size();d++)
+           {
+               if(v[d]>v[a])
+               {
+                   cnt++;
+                   dp(d);
+                   mem[a]=max(mem[a],mem[d]+1);
+               }
+           }
+
+
+
+
+
+
+}
+int flag=0;
+void lis(int a)
+{
+
+    cout<<a<< " ";
+    for(int b=a+1;b<v.size();b++)
+    {
+        if(mem[b]+1==mem[a])
+        {
+            lis(b);
+        }
+    }
+}
+int main()
+{
+   int a,b,c,d,e,f,g;
+   cin>>a;
+   for(b=0;b<a;b++)
+   {
+       cin>>c;
+       v.push_back(c);
+   }
+   for(b=0;b<200;b++)
+   {
+       mem[b]=-1;
+   }
+   for(b=0;b<a;b++)
+   {
+       if(mem[b]==-1)
+       {
+       dp(b);
+
+       }
+   }
+   c=mem[0];
+   d=0;
+   for(b=0;b<a;b++)
+   {
+       if(mem[b]>c)
+       {
+           c=mem[b];
+           d=b;
+       }
+
+   }
+   cout<<d<<endl;
+   lis(d);
+
+
+
+
+    return 0;
+}
+/*
+
+6
+5 0 9 2 7 3 4
+*/
+
+

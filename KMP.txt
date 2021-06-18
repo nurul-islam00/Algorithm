@@ -1,0 +1,70 @@
+#include<bits/stdc++.h>
+using namespace std;
+int lps[1000];
+string text,pat;
+int main()
+{
+cin>>text>>pat;
+int a,b,c;
+b=1;
+
+lps[0]=0;
+a=0;
+while(b<pat.size())
+{
+    if(pat[b]==pat[a])
+    {
+        lps[b]=a+1;
+        a++;
+        b++;
+    }
+    else
+    {
+        if(a>0)
+        {
+            a=lps[a-1];
+        }
+        else
+        {
+            b++;
+        }
+    }
+}
+a=0;
+b=0;
+c=0;
+
+while(a<text.size())
+{
+    if(text[a]==pat[b])
+    {
+
+        a++;
+        b++;
+
+    }
+
+    if(b==pat.size())
+    {
+        cout<<" Found at "<<a-pat.size()<<endl;
+        b=lps[b-1];
+    }
+    else if(a<text.size()&&pat[b]!=text[a])
+    {
+        if(b!=0)
+        {
+            b=lps[b-1];
+        }
+        else
+        {
+            a++;
+        }
+    }
+}
+
+
+
+
+    return 0;
+}
+

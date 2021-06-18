@@ -1,0 +1,113 @@
+
+// spoj horrible queries wa
+
+
+#include<bits/stdc++.h>
+#define ll unsigned long long int
+using namespace std;
+ll sum[2*100005];
+ll  pro[2*100005];
+ll rr[100005];
+void build(ll l, ll r, ll pos)
+{
+    if(l==r)
+    {
+        sum[pos]=rr[l];
+        pro[pos]=0;
+        return;
+    }
+    int mid;
+    mid=(l+r)/2.;
+    build(l,mid,pos*2);
+    build(mid+1,r,pos*2+1);
+    sum[pos]=(sum[pos*2]+sum[pos*2+1]);
+}
+int query(ll l,ll r,ll ql, ll qr, ll pos,ll carry)
+{
+    if(r<ql||l>qr)
+    {
+        return 0;
+    }
+    if(l>=ql&&r<=qr)
+    {
+        return sum[pos]+carry*(r-l+1);
+
+    }
+    int mid=(l+r)/2.;
+    ll a,b;
+    a=query(l,mid,ql,qr,pos*2,carry+pro[pos]);
+    b=query(mid+1,r,ql,qr,pos*2+1,carry+pro[pos]);
+    return a+b;
+}
+void update(ll l , ll r , ll ql , ll qr ,ll value,  ll pos)
+
+{
+
+    if(r<ql||l>qr)
+    {
+        return;
+    }
+    int mid=(l+r)/2.;
+    if(l>=ql&&r<=qr)
+    {
+       sum[pos]+=(r-l+1)*value;
+       pro[pos]+=value;
+        return;
+    }
+    update(l,mid,ql,qr,value, pos*2);
+    update(mid+1,r,ql,qr,value,pos*2+1);
+    sum[pos]=sum[pos*2]+sum[pos*2+1]+(r-l+1)*pro[pos];
+
+
+
+}
+
+int main()
+{
+    ll a,b,c,d,e,ql,qr,tc,cnt=1,f,g,h,i;
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cin>>tc;
+    while(tc--)
+    {
+        cin>>b>>c;
+        memset(pro,0,sizeof(pro));
+        memset(sum,0,sizeof(sum));
+        for(d=1;d<=b;d++)
+        {
+            rr[d]=0;
+        }
+        build(1,b,1);
+        for(d=1;d<=c;d++)
+        {
+            cin>>e;
+            if(e==0)
+            {
+                cin>>f>>g>>h;
+                update(1,b,f,g,h,1);
+            }
+            else
+            {
+                cin>>f>>g;
+                h=query(1,b,f,g,1,0);
+                cout<<h<<endl;
+            }
+        }
+    }
+
+
+   //  build(0,a-1,1);
+
+    // i=query(0,a-1,d,e,1);
+
+
+
+       // h= update(0,a-1,d,e,1);
+
+
+
+
+
+
+    return 0;
+}

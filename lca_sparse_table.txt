@@ -1,0 +1,94 @@
+#include<bits/stdc++.h>
+using namespace std;
+const int mx=1e5+100;
+const int lg=20;
+int sp[mx][lg];
+int lv[mx];
+vector<int>v[mx];
+void dfs(int c , int p)
+{
+    lv[c]=lv[p]+1;
+    sp[c][0]=p;
+    for(int u=0;u<v[c].size();u++)
+    {
+        int s=v[c][u];
+        if(s==p)continue;
+        dfs(s,c);
+    }
+}
+void SPTBL(int n)
+{
+    for(int j=1;(1<<j)<=n;j++)
+    {
+
+        for(int i=1;i<=n;i++)
+        {
+           if(sp[i][j-1]==-1)continue;
+           sp[i][j]=sp[sp[i][j-1]][j-1];
+        }
+
+
+    }
+}
+int lca(int x, int y)
+{
+    if(x>y)
+    {
+        swap(x,y);
+    }
+    int dist=lv[y]-lv[x];
+    for(int i=19;i>=0;i--)
+    {
+        if(1<<i<=dist)
+        {
+            dist-=1<<i;
+            y=sp[y][i];
+        }
+    }
+    if(x==y)
+    {
+        return x;
+    }
+    for(int i=19;i>=0;i--)
+    {
+        if(sp[x][i]==sp[y][i])
+        {
+            continue;
+        }
+        x=sp[x][i];
+        y=sp[y][i];
+    }
+    return sp[x][0];
+}
+int main()
+{
+  int n,q;
+  cin>>n>>q;
+  for(int i=1;i<n;i++)
+  {
+      int x,y;
+      cin>>x>>y;
+      v[x].push_back(y);
+      v[y].push_back(x);
+  }
+  memset(sp,-1,sizeof(sp));
+  lv[1]=0;
+
+  dfs(1,1);
+  sp[1][0]=-1;
+  SPTBL(n);
+  for(int i=1;i<=q;i++)
+  {
+      int u,v;
+      cin>>u>>v;
+      int lc=lca(u,v);
+      cout<<lc<<endl;
+  }
+
+
+
+
+
+
+    return 0;
+}

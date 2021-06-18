@@ -1,0 +1,83 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define MAX_N 20
+#define INF 99999999
+#define EMPTY_VALUE -1
+
+int w[MAX_N][MAX_N];
+int mem[MAX_N];
+
+int fn(int u, int n) {
+
+    if(u==4)
+    {
+        return 0;
+    }
+    if(mem[u]!=EMPTY_VALUE)
+    {
+        return mem[u];
+    }
+int    ans=INF;
+    for(int a=0;a<=4;a++)
+    {
+        if(w[u][a]!=INF)
+        {
+            ans=min(ans,fn(a,n)+w[u][a]);
+        }
+    }
+
+    mem[u]=ans;
+    return mem[u];
+
+
+
+}
+
+int main()
+{
+    int a,b,c,d,e,f,g,h,i,j;
+    for(a=0;a<=4;a++)
+    {
+        for(b=0;b<=4;b++)
+        {
+            w[a][b]=INF;
+            mem[b]=EMPTY_VALUE;
+        }
+    }
+
+    for(a=0;a<=4;a++)
+    {
+        for(b=0;b<=4;b++)
+        {
+            cin>>c;
+
+                if(c==0)
+                {
+                    continue;
+                }
+                else
+                {
+                    w[a][b]=c;
+                }
+
+        }
+
+
+
+    }
+    d=fn(0,4);
+    cout<<d<<endl;
+
+/*
+
+0 2 0 1 0
+0 0 1 0 9
+0 0 0 0 3
+0 3 0 0 0
+0 0 0 0 0
+*/
+
+
+
+    return 0;
+}

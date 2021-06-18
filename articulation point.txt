@@ -1,0 +1,75 @@
+#include<bits/stdc++.h>
+using namespace std;
+int vis[10005],low[10005];
+vector<int>v[10005];
+int cnt;
+int res;
+int flag;
+void arti(int a)
+{
+    cnt++;
+    int e,f;
+    e=0;
+    f=0;
+    vis[a]=low[a]=cnt;
+
+    for(int b=0;b<v[a].size();b++)
+    {
+        int c=v[a][b];
+        if(vis[c]==0)
+        {
+            arti(c);
+            low[a]=min(low[a],low[c]);
+            if(vis[a]<=low[c])
+            {
+                e++;
+            }
+            f++;
+        }
+        else
+        {
+            low[a]=min(low[a],vis[c]);
+        }
+    }
+    if(a==1&&f>1)
+    {
+        res++;
+    }
+    else if(a>1&&e>0)
+    {
+        res++;
+    }
+}
+int main()
+{
+
+long long int tc,a,b,c,d,e,f,g=1,h;
+cin>>tc;
+while(tc--)
+{
+    cin>>b>>c;
+    cnt=0;
+    res=0;
+    for(d=1;d<=b;d++)
+    {
+        vis[d]=0;
+        low[d]=0;
+    }
+    for(d=1;d<=c;d++)
+    {
+        cin>>e>>f;
+        v[e].push_back(f);
+        v[f].push_back(e);
+    }
+    flag=f;
+    arti(1);
+  cout<<"Case "<<g++<<": "<<res<<endl;
+    for(d=1;d<=b;d++)
+    {
+        v[d].clear();
+    }
+}
+
+
+    return 0;
+}
